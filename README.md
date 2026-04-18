@@ -1,6 +1,6 @@
 # Ternary-Bonsai-8B 推論テスト
 
-Hugging Face で公開されている 1.58 ビットの 3 値量子化モデル `onnx-community/Ternary-Bonsai-8B-ONNX` をローカルで動作させるための検証用リポジトリです。
+Hugging Face で公開されている 1.58 ビットの 3 値量子化モデル [onnx-community/Ternary-Bonsai-8B-ONNX](https://huggingface.co/onnx-community/Ternary-Bonsai-8B-ONNX) をローカルで動作させるための検証用リポジトリです。
 
 パッケージマネージャとして `uv` を使用しており、環境構築から実行まで自動的に行われます。
 
@@ -71,6 +71,8 @@ Windows 上で `compare.bat 10` を実行し、safetensors 由来の ONNX であ
 | q2->fp8 conversion / DirectML |  3.51s |  67.34s |   3.52s |  74.39s |
 | q8 conversion / CPU       |  3.30s |   8.59s | 281.27s | 293.17s |
 | q8 conversion / DirectML  |  3.39s |   8.12s |  10.47s |  22.00s |
+
+※ Model load が遅いのは SSD ではなく HDD に置いているためです。
 
 `q8 conversion` では Optimum から legacy ONNX と `position_ids` 不在に関する警告が出ています。
 
