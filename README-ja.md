@@ -61,13 +61,13 @@ compare.bat 10
 
 ## モデル形式
 
-このリポジトリでは出自の異なる 2 系統のモデルを扱っています。
+このリポジトリでは出自の異なる 2 系統の形式を扱っています。
 
 ### safetensors 由来 (標準 ONNX グラフ)
 
 `prism-ml/Ternary-Bonsai-8B-unpacked` の dense 重みから `optimum-cli export onnx` で生成します。グラフ内の演算はすべて標準 ONNX op です。
 
-| モデル | 1 要素 | 生成方法 |
+| 形式 | 1 要素 | 生成方法 |
 |-------|-------:|---------|
 | `model_fp32` | 4 byte | `optimum-cli export onnx --dtype fp32` |
 | `model_fp16` | 2 byte | `optimum-cli export onnx --dtype fp16` |
@@ -77,7 +77,7 @@ compare.bat 10
 
 `onnx-community/Ternary-Bonsai-8B-ONNX` の 2-bit packed ONNX から変換します。グラフ構造に `GroupQueryAttention` などの `com.microsoft` カスタム op が残るため、safetensors 系とはグラフの構造自体が異なります。
 
-| モデル | 変換スクリプト | 形式 |
+| 形式 | 変換スクリプト | 形式 |
 |-------|-------------|------|
 | `model_q2_to_q4` | [convert_q2.py](convert_q2.py) `--target-format q4` | `MatMulNBits` q4 |
 | `model_q2_to_q8` | [convert_q2.py](convert_q2.py) `--target-format q8` | `MatMulNBits` q8 |

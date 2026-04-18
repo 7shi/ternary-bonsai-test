@@ -67,7 +67,7 @@ This repository works with two distinct lineages of models.
 
 Generated from the dense weights of `prism-ml/Ternary-Bonsai-8B-unpacked` using `optimum-cli export onnx`. All operations in the graph are standard ONNX ops.
 
-| Model | Bytes/element | How to generate |
+| Format | Bytes/element | How to generate |
 |-------|-------------:|----------------|
 | `model_fp32` | 4 | `optimum-cli export onnx --dtype fp32` |
 | `model_fp16` | 2 | `optimum-cli export onnx --dtype fp16` |
@@ -77,7 +77,7 @@ Generated from the dense weights of `prism-ml/Ternary-Bonsai-8B-unpacked` using 
 
 Converted from the 2-bit packed ONNX of `onnx-community/Ternary-Bonsai-8B-ONNX`. The graph retains `com.microsoft` custom ops such as `GroupQueryAttention`, making the graph structure fundamentally different from the safetensors-derived models.
 
-| Model | Conversion script | Format |
+| Format | Conversion script | Format |
 |-------|------------------|--------|
 | `model_q2_to_q4` | [convert_q2.py](convert_q2.py) `--target-format q4` | `MatMulNBits` q4 |
 | `model_q2_to_q8` | [convert_q2.py](convert_q2.py) `--target-format q8` | `MatMulNBits` q8 |
