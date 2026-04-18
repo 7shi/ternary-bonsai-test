@@ -3,7 +3,7 @@ import time
 
 script_start_time = time.perf_counter()
 
-from inference_common import add_prompt_generation_args, apply_generation_defaults, build_chat_inputs, build_warmup_inputs, patch_num_logits_to_keep, print_generation_header
+from run_common import add_prompt_generation_args, apply_generation_defaults, build_chat_inputs, build_warmup_inputs, patch_num_logits_to_keep, print_generation_header
 from transformers import AutoTokenizer, TextStreamer
 from optimum.onnxruntime import ORTModelForCausalLM
 import torch
