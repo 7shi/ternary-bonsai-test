@@ -1,0 +1,13 @@
+[project]
+name = "ternary-bonsai-test"
+version = "0.1.0"
+description = "Inference test for Ternary-Bonsai-8B with ONNX Runtime (CPU/DirectML) and multiple quantization formats"
+requires-python = ">=3.13"
+dependencies = [
+    "huggingface-hub>=0.36.0",
+    "optimum[onnxruntime]>=2.1.0",
+    "transformers>=4.48.0",
+    "onnxruntime-directml==1.23.0; sys_platform == 'win32'",
+    "hf-xet>=1.4.3",
+    "accelerate>=1.13.0",
+]
