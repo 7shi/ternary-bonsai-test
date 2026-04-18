@@ -3,6 +3,7 @@ import time
 
 script_start_time = time.perf_counter()
 
+from inference_common import add_prompt_generation_args, apply_generation_defaults, build_chat_inputs, build_warmup_inputs, print_generation_header
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -11,9 +12,12 @@ library_load_elapsed = time.perf_counter() - script_start_time
 DEFAULT_MODEL_ID = "prism-ml/Ternary-Bonsai-8B-unpacked"
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--model-id", default=DEFAULT_MODEL_ID)
-parser.add_argument("--prompt", default="AIの未来について考えてください。")
-parser.add_argument("--max-new-tokens", type=int, default=10)
+parser.add_argument(
+    "--model-id",
+    default=DEFAULT_MODEL_ID,
+    help="Hugging Face model ID or local path to the safetensors checkpoint.",
+)
+add_prompt_generation_args(parser)
 parser.add_argument(
     "--dtype",
     choices=["auto", "float32", "float16", "bfloat16"],
@@ -25,7 +29,12 @@ parser.add_argument(
     action="store_true",
     help="Enable sampling instead of greedy decoding.",
 )
-parser.add_argument("--temperature", type=float, default=0.7)
+parser.add_argument(
+    "--temperature",
+    type=float,
+    default=0.7,
+    help="Sampling temperature to use when --do-sample is enabled.",
+)
 args = parser.parse_args()
 
 def resolve_dtype(dtype_name: str):
@@ -40,30 +49,26 @@ tokenizer = AutoTokenizer.from_pretrained(args.model_id, fix_mistral_regex=True)
 print("Loading safetensors model on CPU...")
 model = AutoModelForCausalLM.from_pretrained(
     args.model_id,
-    torch_dtype=resolve_dtype(args.dtype),
+    dtype=resolve_dtype(args.dtype),
     device_map="cpu",
     low_cpu_mem_usage=True,
 )
-for setting_name in ("temperature", "top_p", "min_p", "top_k"):
-    if hasattr(model.generation_config, setting_name):
-        setattr(model.generation_config, setting_name, None)
+apply_generation_defaults(model)
 
-model_load_elapsed = time.perf_counter() - model_load_start
 model.eval()
+warmup_inputs, warmup_token_id = build_warmup_inputs(tokenizer)
+with torch.no_grad():
+    model.generate(
+        **warmup_inputs,
+        max_new_tokens=1,
+        do_sample=False,
+        pad_token_id=tokenizer.eos_token_id or warmup_token_id,
+    )
+model_load_elapsed = time.perf_counter() - model_load_start
 
-messages = [{"role": "user", "content": args.prompt}]
-formatted_prompt = tokenizer.apply_chat_template(
-    messages,
-    tokenize=False,
-    add_generation_prompt=True,
-)
-inputs = tokenizer(formatted_prompt, return_tensors="pt")
+inputs = build_chat_inputs(tokenizer, args.prompt)
 
-print(">", args.prompt)
-print()
-print(f"Library load time: {library_load_elapsed:.2f}s")
-print(f"Model load time: {model_load_elapsed:.2f}s")
-print("Generating...")
+print_generation_header(args.prompt, library_load_elapsed, model_load_elapsed)
 
 generation_start = time.perf_counter()
 with torch.no_grad():
