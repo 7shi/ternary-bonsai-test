@@ -120,6 +120,8 @@ uv run python convert_fp8.py --source-model-path model_fp16/model.onnx --output-
 
 Results from `compare.bat 10`. `Load` includes tokenizer initialization and a warmup pass (1 token in, 1 token out). Models are stored on HDD.
 
+**Prompt**：AIの未来について考えてください。(Please think about the future of AI.)
+
 | Format           | Target   | Load    | Generation | Result |
 | -----------------|--------- | ------: | ---------: | ------ |
 | safetensors_fp16 | CPU      | 170.30s |      9.82s | AIの未来について考えるとき、いくつかの重要な |
@@ -133,6 +135,8 @@ Results from `compare.bat 10`. `Load` includes tokenizer initialization and a wa
 | model_q2_to_q8   | DirectML |   8.65s |      7.02s | AI Nation informed simply Adult Hobby pis Agents contributing |
 | model_q2_to_q4   | CPU      |  37.59s |      6.46s | AIの未来について考えるとき、いくつかの重要な |
 | model_q2_to_q4   | DirectML |   5.96s |      1.12s | AI Nation informed simply formats teacher norm Sh Earth |
+
+Result of generating up to 1000 tokens: [SAMPLE.md](SAMPLE.md)
 
 ### Recommended Configuration
 
