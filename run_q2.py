@@ -36,7 +36,7 @@ model = ORTModelForCausalLM.from_pretrained(
 )
 apply_generation_defaults(model)
 
-# ONNXモデルが要求する 'num_logits_to_keep' 入力を内部的に注入するパッチ
+# Inject the 'num_logits_to_keep' input required by this ONNX model.
 patch_num_logits_to_keep(model)
 warmup_inputs, warmup_token_id = build_warmup_inputs(tokenizer)
 model.generate(
