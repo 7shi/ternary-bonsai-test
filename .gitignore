@@ -10,4 +10,4 @@ wheels/
 .venv
 
 # Models
-model_*/
+onnx_*/

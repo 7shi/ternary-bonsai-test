@@ -14,8 +14,8 @@ TARGET_BITS = {
 }
 
 DEFAULT_OUTPUTS = {
-    "q4": "model_q2_to_q4/model.onnx",
-    "q8": "model_q2_to_q8/model.onnx",
+    "q4": "onnx_q2_to_q4/model.onnx",
+    "q8": "onnx_q2_to_q8/model.onnx",
 }
 
 
@@ -23,7 +23,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--source-model-path",
-        default="model_q2/Ternary-Bonsai-8B-ONNX/onnx/model_q2f16.onnx",
+        default="onnx_q2/Ternary-Bonsai-8B-ONNX/onnx/model_q2f16.onnx",
         help="Path to the source q2 ONNX model.",
     )
     parser.add_argument(
@@ -34,7 +34,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--output-model-path",
-        help="Path to write the converted ONNX model. Defaults to model_q2_to_q4/model.onnx or model_q2_to_q8/model.onnx.",
+        help="Path to write the converted ONNX model. Defaults to onnx_q2_to_q4/model.onnx or onnx_q2_to_q8/model.onnx.",
     )
     return parser.parse_args()
 

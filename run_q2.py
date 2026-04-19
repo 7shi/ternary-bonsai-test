@@ -18,7 +18,7 @@ args = parser.parse_args()
 
 print("Loading local q2 packed model...")
 print("This direct q2 execution path is expected to fail in the current ONNX Runtime environment.")
-local_dir = "model_q2/Ternary-Bonsai-8B-ONNX"
+local_dir = "onnx_q2/Ternary-Bonsai-8B-ONNX"
 
 model_load_start = time.perf_counter()
 print("Loading tokenizer...")

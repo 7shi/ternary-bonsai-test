@@ -3,7 +3,7 @@ from pathlib import Path
 from huggingface_hub import snapshot_download
 
 MODEL_ID = "onnx-community/Ternary-Bonsai-8B-ONNX"
-LOCAL_MODEL_DIR = Path("model_q2") / "Ternary-Bonsai-8B-ONNX"
+LOCAL_MODEL_DIR = Path("onnx_q2") / "Ternary-Bonsai-8B-ONNX"
 ALLOW_PATTERNS = [
     "tokenizer_config.json",
     "tokenizer.json",

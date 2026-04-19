@@ -24,12 +24,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--source-model-path",
-        default="model_fp16/model.onnx",
+        default="onnx_fp16/model.onnx",
         help="Path to the source ONNX model.",
     )
     parser.add_argument(
         "--output-model-path",
-        default="model_fp8/model.onnx",
+        default="onnx_fp8/model.onnx",
         help="Path to write the converted ONNX model.",
     )
     parser.add_argument(
@@ -75,8 +75,8 @@ def tensor_to_fp8_initializer(
 
 
 def convert_model(
-    source_model_path: str = "model_fp16/model.onnx",
-    output_model_path: str = "model_fp8/model.onnx",
+    source_model_path: str = "onnx_fp16/model.onnx",
+    output_model_path: str = "onnx_fp8/model.onnx",
     fp8_format: str = "e4m3fn",
     min_elements: int = 1024,
 ) -> None:

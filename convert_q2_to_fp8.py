@@ -18,12 +18,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--source-model-path",
-        default="model_q2/Ternary-Bonsai-8B-ONNX/onnx/model_q2f16.onnx",
+        default="onnx_q2/Ternary-Bonsai-8B-ONNX/onnx/model_q2f16.onnx",
         help="Path to the source q2 ONNX model.",
     )
     parser.add_argument(
         "--output-model-path",
-        default="model_q2_to_fp8/model.onnx",
+        default="onnx_q2_to_fp8/model.onnx",
         help="Path to write the converted dense fp8 ONNX model.",
     )
     parser.add_argument(
@@ -140,8 +140,8 @@ def make_external_tensor(
 
 
 def convert_model(
-    source_model_path: str = "model_q2/Ternary-Bonsai-8B-ONNX/onnx/model_q2f16.onnx",
-    output_model_path: str = "model_q2_to_fp8/model.onnx",
+    source_model_path: str = "onnx_q2/Ternary-Bonsai-8B-ONNX/onnx/model_q2f16.onnx",
+    output_model_path: str = "onnx_q2_to_fp8/model.onnx",
     fp8_format: str = "e4m3fn",
 ) -> None:
     model_path = Path(source_model_path)

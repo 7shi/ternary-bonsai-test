@@ -14,12 +14,12 @@ library_load_elapsed = time.perf_counter() - script_start_time
 
 
 model_id = "onnx-community/Ternary-Bonsai-8B-ONNX"
-q4_model_dir = Path("model_q2_to_q4")
-q8_model_dir = Path("model_q2_to_q8")
-q2_fp8_model_dir = Path("model_q2_to_fp8")
-fp8_export_dir = Path("model_fp8")
-fp32_export_dir = Path("model_fp32")
-fp16_export_dir = Path("model_fp16")
+q4_model_dir = Path("onnx_q2_to_q4")
+q8_model_dir = Path("onnx_q2_to_q8")
+q2_fp8_model_dir = Path("onnx_q2_to_fp8")
+fp8_export_dir = Path("onnx_fp8")
+fp32_export_dir = Path("onnx_fp32")
+fp16_export_dir = Path("onnx_fp16")
 
 
 parser = argparse.ArgumentParser()
@@ -72,26 +72,26 @@ def resolve_model_artifacts() -> tuple[Path, str, str]:
 
     if args.model_source == "fp8":
         if fp8_export is None:
-            raise FileNotFoundError("FP8 ONNX export not found in model_fp8.")
+            raise FileNotFoundError("FP8 ONNX export not found in onnx_fp8.")
         print(f"Using fp8 export from {fp8_export[0]}...")
         return fp8_export
 
     if args.model_source == "fp16":
         if fp16_export is None:
-            raise FileNotFoundError("FP16 ONNX export not found in model_fp16.")
+            raise FileNotFoundError("FP16 ONNX export not found in onnx_fp16.")
         print(f"Using fp16 export from {fp16_export[0]}...")
         return fp16_export
 
     if args.model_source == "fp32":
         if fp32_export is None:
-            raise FileNotFoundError("FP32 ONNX export not found in model_fp32.")
+            raise FileNotFoundError("FP32 ONNX export not found in onnx_fp32.")
         print(f"Using fp32 export from {fp32_export[0]}...")
         return fp32_export
 
     if args.model_source == "q4":
         if not q4_model_path.exists():
             raise FileNotFoundError(
-                "Converted q4 ONNX model not found in model_q2_to_q4. "
+                "Converted q4 ONNX model not found in onnx_q2_to_q4. "
                 "Run 'uv run python convert_q2.py --target-format q4' first."
             )
         print(f"Using converted model from {q4_model_dir}...")
@@ -100,7 +100,7 @@ def resolve_model_artifacts() -> tuple[Path, str, str]:
     if args.model_source == "q8":
         if not q8_model_path.exists():
             raise FileNotFoundError(
-                "Converted q8 ONNX model not found in model_q2_to_q8. "
+                "Converted q8 ONNX model not found in onnx_q2_to_q8. "
                 "Run 'uv run python convert_q2.py --target-format q8' first."
             )
         print(f"Using converted model from {q8_model_dir}...")
@@ -109,7 +109,7 @@ def resolve_model_artifacts() -> tuple[Path, str, str]:
     if args.model_source == "q2fp8":
         if not q2_fp8_model_path.exists():
             raise FileNotFoundError(
-                "Converted q2->fp8 ONNX model not found in model_q2_to_fp8. "
+                "Converted q2->fp8 ONNX model not found in onnx_q2_to_fp8. "
                 "Run 'uv run python convert_q2_to_fp8.py' first."
             )
         print(f"Using converted fp8 model from {q2_fp8_model_dir}...")
