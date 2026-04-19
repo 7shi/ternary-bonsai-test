@@ -9,8 +9,8 @@ Hugging Face で公開されている 1.58 ビットの 3 値量子化モデル 
 推奨構成は `onnx_q2_to_q4 / CPU` です。q2 packed ONNX をダウンロードし、ローカルで q4 に変換してから推論します。
 
 ```bash
-uv run python download_q2.py
-uv run python convert_q2.py --target-format q4
+uv run download_q2.py
+uv run convert_q2.py --target-format q4
 uv run run_onnx.py --provider cpu --model-source q4
 ```
 
@@ -92,20 +92,20 @@ compare.bat 10
 ### q2 packed ONNX のダウンロード
 
 ```bash
-uv run python download_q2.py
+uv run download_q2.py
 ```
 
 ### q2 → q4 / q8 変換
 
 ```bash
-uv run python convert_q2.py --target-format q4
-uv run python convert_q2.py --target-format q8
+uv run convert_q2.py --target-format q4
+uv run convert_q2.py --target-format q8
 ```
 
 ### q2 → dense fp8 変換
 
 ```bash
-uv run python convert_q2_to_fp8.py
+uv run convert_q2_to_fp8.py
 ```
 
 ### safetensors → ONNX エクスポート
@@ -113,7 +113,7 @@ uv run python convert_q2_to_fp8.py
 ```bash
 uv run optimum-cli export onnx -m prism-ml/Ternary-Bonsai-8B-unpacked onnx_fp32 --task text-generation-with-past --pad_token_id 151643 --dtype fp32
 uv run optimum-cli export onnx -m prism-ml/Ternary-Bonsai-8B-unpacked onnx_fp16 --task text-generation-with-past --pad_token_id 151643 --dtype fp16
-uv run python convert_fp8.py --source-model-path onnx_fp16/model.onnx --output-model-path onnx_fp8/model.onnx
+uv run convert_fp8.py --source-model-path onnx_fp16/model.onnx --output-model-path onnx_fp8/model.onnx
 ```
 
 `optimum-cli export onnx` が受け付ける dtype は `fp32`、`fp16`、`bf16` です。`--dtype fp8` は使えないため、fp8 は fp16 ONNX からの後処理で生成します。
