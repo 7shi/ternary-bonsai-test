@@ -120,23 +120,23 @@ uv run python convert_fp8.py --source-model-path onnx_fp16/model.onnx --output-m
 
 ## ベンチマーク
 
-`compare.bat 10` による計測結果です。`Load` には tokenizer 読み込みとウォームアップ (1 トークン入出力) を含みます。モデルは HDD に保存しています。
+`compare.bat 10` による計測結果です。「ロード」にはトークナイザーとモデルの読み込みに加えてウォームアップ (1 トークン入出力) を含みます。モデルは HDD に保存しているため読み込みが遅いですが、2 回目 (DirectML) は OS のファイルキャッシュにより高速化されます。
 
 **プロンプト**：AIの未来について考えてください。
 
-| Format           | Target   | Load    | Generation | Result |
-| -----------------|--------- | ------: | ---------: | ------ |
-| safetensors_fp16 | CPU      | 170.30s |      9.82s | AIの未来について考えるとき、いくつかの重要な |
-| onnx_fp16        | CPU      | 213.59s |      9.59s | AIの未来について考えるとき、いくつかの重要な |
-| onnx_fp16        | DirectML | 149.75s |      4.75s | AIの未来について考えるとき、いくつかの重要な |
-| onnx_fp8         | CPU      | 206.62s |     11.09s | AIの未来について考えるときは、いくつかの重要な |
-| onnx_fp8         | DirectML | 137.75s |      5.30s | AIの未来について考えるときは、いくつかの重要な |
-| onnx_q2_to_fp8   | CPU      | 235.20s |     10.18s | AIの未来について考えるときは、いくつかの重要な |
-| onnx_q2_to_fp8   | DirectML | 131.84s |      2.48s | AI inki authoritative undert particles replicate faculty guess order |
-| onnx_q2_to_q8    | CPU      | 106.68s |    199.62s | AIの未来について考えるとき、いくつかの重要な |
-| onnx_q2_to_q8    | DirectML |   8.65s |      7.02s | AI Nation informed simply Adult Hobby pis Agents contributing |
-| onnx_q2_to_q4    | CPU      |  37.59s |      6.46s | AIの未来について考えるとき、いくつかの重要な |
-| onnx_q2_to_q4    | DirectML |   5.96s |      1.12s | AI Nation informed simply formats teacher norm Sh Earth |
+| 形式 | 方式 | ロード | 推論 | 出力 |
+|---|---|---:|---:|---|
+| `safetensors_fp16` | CPU | 170.30s | 9.82s | AIの未来について考えるとき、いくつかの重要な |
+| `onnx_fp16` | CPU | 213.59s | 9.59s | AIの未来について考えるとき、いくつかの重要な |
+| `onnx_fp16` | DirectML | 149.75s | 4.75s | AIの未来について考えるとき、いくつかの重要な |
+| `onnx_fp8` | CPU | 206.62s | 11.09s | AIの未来について考えるときは、いくつかの重要な |
+| `onnx_fp8` | DirectML | 137.75s | 5.30s | AIの未来について考えるときは、いくつかの重要な |
+| `onnx_q2_to_fp8` | CPU | 235.20s | 10.18s | AIの未来について考えるときは、いくつかの重要な |
+| `onnx_q2_to_fp8` | DirectML | 131.84s | 2.48s | AI inki authoritative undert particles replicate faculty guess order |
+| `onnx_q2_to_q8` | CPU | 106.68s | 199.62s | AIの未来について考えるとき、いくつかの重要な |
+| `onnx_q2_to_q8` | DirectML | 8.65s | 7.02s | AI Nation informed simply Adult Hobby pis Agents contributing |
+| `onnx_q2_to_q4` | CPU | 37.59s | 6.46s | AIの未来について考えるとき、いくつかの重要な |
+| `onnx_q2_to_q4` | DirectML | 5.96s | 1.12s | AI Nation informed simply formats teacher norm Sh Earth |
 
 1000 トークンまで生成した結果: [SAMPLE.md](SAMPLE.md)
 
