@@ -2,6 +2,8 @@
 
 A repository for running the 1.58-bit ternary-quantized model [onnx-community/Ternary-Bonsai-8B-ONNX](https://huggingface.co/onnx-community/Ternary-Bonsai-8B-ONNX) locally. Dependency resolution and virtual environment setup are handled automatically via `uv`.
 
+> **English** | [Japanese](README-ja.md)
+
 ## Quick Start
 
 The recommended configuration is `model_q2_to_q4 / CPU`. Download the q2 packed ONNX, convert it locally to q4, then run inference.

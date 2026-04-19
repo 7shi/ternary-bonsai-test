@@ -2,6 +2,8 @@
 
 Hugging Face で公開されている 1.58 ビットの 3 値量子化モデル [onnx-community/Ternary-Bonsai-8B-ONNX](https://huggingface.co/onnx-community/Ternary-Bonsai-8B-ONNX) をローカルで動作させるための検証用リポジトリです。パッケージマネージャには `uv` を使用しており、依存関係の解決と仮想環境の作成が自動的に行われます。
 
+> [英語版](README.md) | **日本語版**
+
 ## クイックスタート
 
 推奨構成は `model_q2_to_q4 / CPU` です。q2 packed ONNX をダウンロードし、ローカルで q4 に変換してから推論します。
