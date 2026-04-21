@@ -176,3 +176,60 @@ model      = AutoModelForCausalLM.from_config(config, dtype=torch.float16)
 Load norm and embedding weights via `load_state_dict(..., strict=False)`, then
 replace each `nn.Linear` projection with a custom `Q2Linear` module that holds
 `(N, K)` int8 weights and `(N, n_blocks)` float16 scales.
+
+---
+
+## CPU Inference Performance: Optimization Experiments
+
+Environment: WSL2, 32 GB RAM, CPU only (no GPU).
+
+### Baseline
+
+Original implementation using `torch.einsum("bki,nki->bnk", ...)` with int8 weights
+converted to float32 per forward call:
+
+```
+Generation time: ~91s for 10 tokens → 0.11 tok/s
+```
+
+### Approaches tried and results
+
+| Approach | tok/s | Notes |
+|---|---|---|
+| `einsum` float32 (baseline) | 0.11 | int8 → float32 per call |
+| pos/neg float16 masks + `bmm` | OOM | 4× int8 memory (2 float16 tensors) |
+| float16 `bmm` (precomputed layout) | 0.02 | No AVX-512 FP16 → slow fallback |
+| int8 layout + float32 `bmm` | 0.11 | Same as baseline |
+| + `torch.compile` | 0.11 | No effect |
+| `torch._int_mm` loop (32 blocks) | 0.10 | Python loop overhead dominates |
+| Pre-scaled float16 + single `F.linear` | 0.11 | Loop eliminated, still same |
+
+### Why 0.11 tok/s is the ceiling
+
+For a single token (batch=1), measured time per `Q2Linear` call averages ~35 ms,
+while memory-bandwidth theory predicts ~0.4–3 ms depending on layer size.
+The **87×** gap is PyTorch CPU dispatch overhead: thread management, tensor
+allocation/deallocation, and kernel launch cost per operation.
+
+This overhead is not addressable within pure Python/PyTorch regardless of the
+linear-algebra formulation used.
+
+### Key findings
+
+- **float16 `bmm` on CPU without AVX-512 FP16** falls back to a slow emulation
+  path and is 5× slower than float32.
+- **`torch.compile`** does not help for CPU-dispatch-overhead-bound workloads.
+- **`torch._int_mm` in a Python loop** (32 blocks × 253 layers = 8096 calls/token)
+  adds loop overhead that negates the int8 GEMM benefit.
+- **Pre-scaling** (absorbing block scales into float16 weights for a single SGEMV)
+  eliminates all loops but still hits the same dispatch ceiling.
+- The **current implementation** uses pre-scaled float16 + `torch.compile` +
+  single `F.linear` per layer.
+
+### Path to faster CPU inference
+
+To exceed ~0.5 tok/s on CPU, the dispatch overhead must be bypassed:
+
+- **llama.cpp / GGUF**: purpose-built C++ CPU inference, 50–100× faster.
+- **Custom C extension**: eliminates PyTorch kernel launch cost.
+- **Batched inference**: amortise overhead over multiple parallel prompts.
