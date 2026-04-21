@@ -53,6 +53,21 @@ A script to confirm that the current ONNX Runtime cannot run the q2 model as-is.
 uv run run_q2.py
 ```
 
+### PyTorch Native Ternary Execution ([run_q2_pytorch.py](run_q2_pytorch.py))
+
+Extracts all weights directly from the q2 ONNX file and runs inference via a
+pure PyTorch implementation of block-scaled ternary arithmetic. No additional
+model download is required. Intended for technical investigation of the ternary
+quantization mechanism rather than practical use.
+
+```bash
+uv run run_q2_pytorch.py
+```
+
+This implementation confirms that the linear layer weights are truly ternary:
+only the values −1, 0, and +1 appear (each at approximately 33%).
+For the ONNX weight format details that made this possible, see [ONNX_Q2.md](ONNX_Q2.md).
+
 ### Batch Comparison ([compare.bat](compare.bat))
 
 Runs all 13 conditions (safetensors + each ONNX × CPU/DirectML) sequentially.

@@ -53,6 +53,16 @@ uv run run_safetensors.py --dtype float32 --max-new-tokens 16
 uv run run_q2.py
 ```
 
+### PyTorch ネイティブ 3 値演算 ([run_q2_pytorch.py](run_q2_pytorch.py))
+
+q2 ONNX ファイルから全重みを直接抽出し、block-scaled な 3 値整数演算を純粋な PyTorch で実装して推論します。追加のモデルダウンロードは不要です。実用目的ではなく、3 値量子化の仕組みを技術的に調査するためのスクリプトです。
+
+```bash
+uv run run_q2_pytorch.py
+```
+
+線形層の重みが真に 3 値であることを確認できます。値 −1・0・+1 のみ使用されており、それぞれ約 33% ずつ出現します。ONNX の重みフォーマットの詳細は [ONNX_Q2.md](ONNX_Q2.md) を参照してください。
+
 ### 一括比較 ([compare.bat](compare.bat))
 
 全 13 条件 (safetensors + 各 ONNX × CPU/DirectML) を順次実行します。
